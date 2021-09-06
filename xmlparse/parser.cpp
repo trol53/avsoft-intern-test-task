@@ -1,28 +1,29 @@
 #include "headers/parser.h"
 
-void Parser::Save(std::string file_name){
+void Parser::Save(std::string& file_name, std::map <Department, std::vector<Employment>>& new_dict){
     std::ofstream file(file_name);
     file << "<departments>\n";
-    for (auto node : dict){
-        file << dep_head << node.first.name << '\"' << '>' << '\n';
-        file << "<employments>\n";
+    for (auto node : new_dict){
+        file << "\t" << dep_head << node.first.name << "\">\n";
+        file << "\t\t<employments>\n";
         for (auto employ : node.second){
-            file << empl_head << '\n';
-            file << "<surname>" << employ.last_name << "</surname>\n";
-            file << "<name>" << employ.first_name << "</name>\n";
-            file << "<middleName>" << employ.middle_name << "</middleName>\n";
-            file << "<function>" << employ.function << "</function>\n";
-            file << "<salary>" << employ.salary <<  "</salary>\n";
-            file << empl_tail;
+            file << "\t\t\t" << empl_head << '\n';
+            employ.save(file);
+            file << "\t\t\t" << empl_tail << '\n';
         }
-        file << "</employments>\n";
+        file << "\t\t</employments>\n";
+        file << "\t" << dep_tail << '\n';
 
     }
     file << "</departments>\n";
 }
 
-std::map <Department, std::vector<Employment>> Parser::Load(std::string file_name){
+std::map <Department, std::vector<Employment>> Parser::Load(std::string& file_name){
     std::ifstream file(file_name);
+    if (!file.is_open()){
+        std::cout << "file not open\n";
+        return dict;
+    }
     std::string line;
     while (getline(file, line)){
         line = delete_space(line);
@@ -46,17 +47,18 @@ std::map <Department, std::vector<Employment>> Parser::Load(std::string file_nam
 std::string Parser::delete_space(const std::string& str){
     auto iter_b = str.begin();
     for (;;iter_b++){
-        if (*iter_b != ' ' && *iter_b != '\t')
+        if (*iter_b != ' ' && *iter_b != '\t' && *iter_b != '\r')
             break;
     }
     auto iter_e = str.end();
     iter_e--;
-    for (;;iter_b--){
-        if (*iter_e != ' ' && *iter_e != '\t')
+    for (;;iter_e--){
+        if (*iter_e != ' ' && *iter_e != '\t' && *iter_e != '\r')
             break;
     }
     std::string res(iter_b, iter_e + 1);
-    res.pop_back();
+//    std::cout << int(res.back());
+//    res.pop_back();
     return res;
 }
 

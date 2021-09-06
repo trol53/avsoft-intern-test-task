@@ -11,9 +11,9 @@
 class Parser {
 public:
     Parser() = default;
-    std::map <Department, std::vector<Employment>> Load(std::string file_name);
+    std::map <Department, std::vector<Employment>> Load(std::string& file_name);
 
-    void Save(std::string file_name);
+    void Save(std::string& file_name, std::map <Department, std::vector<Employment>>&);
 
 private:
     std::string delete_space(const std::string& str);

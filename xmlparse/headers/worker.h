@@ -8,7 +8,7 @@
 class Worker {
 public:
 
-    Worker(std::map<Department, std::vector<Employment>>& dict) : dict(dict){}
+    Worker() = default;
 
     void Run();
 
@@ -21,6 +21,7 @@ private:
     void print_tree();
 
     std::stack<Command*> commands;
+    Parser pars;
     std::map<Department, std::vector<Employment>> dict;
 };
 
