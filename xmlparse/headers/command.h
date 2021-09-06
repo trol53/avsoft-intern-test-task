@@ -85,8 +85,8 @@ public:
 
     bool is_available() override;
 
-    std::string new_name = "";
-    std::string last_name = "";
+    Department last_dep;
+    Department new_dep;
 };
 
 class Change_Employment : public Command{

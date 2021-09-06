@@ -1,11 +1,19 @@
 #include "headers/worker.h"
 
 void Worker::Run(){
+    std::string file_name;
+    std::cout << "input file name\n";
+    std::getline(std::cin, file_name);
+    dict = pars.Load(file_name);
     std::string flag;
     print_menu();
     while(true){
         std::getline(std::cin, flag);
-        if (flag == "1"){
+        if (flag == "0"){
+            std::cout << "input new file name\n";
+            std::getline(std::cin, file_name);
+            dict = pars.Load(file_name);
+        } else if (flag == "1") {
             Command* create_dep = new Create_Department;
             create_dep->execute(dict);
             if (create_dep->is_available())
@@ -42,23 +50,30 @@ void Worker::Run(){
                 commands.top()->undo(dict);
                 commands.pop();
             }
-        } else if (flag == "9"){
+        } else if(flag == "9"){
+            std::cout << "input file name\n";
+            std::getline(std::cin, file_name);
+            pars.Save(file_name, dict);
+        } else if (flag == "10"){
             break;
         }
+        print_menu();
     }
 }
 
 void Worker::print_menu(){
     std::cout << "input your next act\n" <<
+              "0 - load new file\n" <<
               "1 - create new department\n" <<
               "2 - create new employment\n" <<
               "3 - delete department\n" <<
               "4 - delete employment\n" <<
               "5 - change department\n" <<
-              "6 - change deployment\n" <<
+              "6 - change employment\n" <<
               "7 - print tree\n" <<
               "8 - undo last act\n" <<
-              "9 - exit\n";
+              "9 - save\n" <<
+              "10 - exit\n";
 }
 
 void Worker::print_tree(){

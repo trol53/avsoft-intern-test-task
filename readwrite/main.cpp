@@ -20,7 +20,7 @@ void* reader(void* args){
         pthread_mutex_lock(&w_mutex);
     pthread_mutex_unlock(&r_mutex);
     std::cout << "Read in thread: " << pthread_self() << '\n';
-    printf("%s%ld", common_buffer);
+    printf("%s", common_buffer);
     std::cout << '\n';
     pthread_mutex_lock(&r_mutex);
     read_count--;
@@ -46,6 +46,7 @@ void Run(){
         int status_r[READER_COUNT];
         int status_w[WRITER_COUNT];
 
+	writer(NULL);
         for (int j = 0; j < READER_COUNT; j++){
             status_r[j] = pthread_create(&readers[j], NULL, reader, NULL);
         }
@@ -70,8 +71,7 @@ int main() {
     pthread_mutex_init(&r_mutex, NULL);
     pthread_mutex_init(&w_mutex, NULL);
     common_buffer = new char[16];
-    void* tmp = writer(NULL);
     Run();
-
+    delete common_buffer;
     return 0;
 }
