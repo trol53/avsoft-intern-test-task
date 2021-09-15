@@ -53,6 +53,14 @@ void Create_Employment::execute(std::map <Department, std::vector<Employment>>& 
     if (iter != dict.end()){
         Employment employ;
         employ.input();
+        if (employ.is_empty()){
+            std::cout << "wrong input\n";
+            return;
+        }
+        if (is_exist(iter->second, employ)){
+            std::cout << "already exist\n";
+            return;
+        }
         last_dep = iter->first;
         iter->second.push_back(employ);
         std::vector<Employment> tmp = std::move(iter->second);
@@ -63,6 +71,14 @@ void Create_Employment::execute(std::map <Department, std::vector<Employment>>& 
     } else {
         std::cout << "Wrong name\n";
     }
+}
+
+bool Create_Employment::is_exist(std::vector<Employment>& employs, Employment& employ){
+    for (auto tmp : employs){
+        if (tmp == employ)
+            return true;
+    }
+    return false;
 }
 
 void Create_Employment::undo(std::map <Department, std::vector<Employment>>& dict) {
@@ -115,10 +131,13 @@ void Delete_Employment::undo(std::map <Department, std::vector<Employment>>& dic
 
 std::vector<Employment>::iterator Delete_Employment::find_employ(std::vector<Employment>& employs, Employment& employ){
     std::string name;
+    std::cout << "input first name\n";
     std::getline(std::cin, name);
     employ.set_first_name(name);
+    std::cout << "input last name\n";
     std::getline(std::cin, name);
     employ.set_last_name(name);
+    std::cout << "input middle name\n";
     std::getline(std::cin, name);
     employ.set_middle_name(name);
     auto iter = employs.begin();
@@ -174,7 +193,6 @@ void Change_Employment::execute(std::map <Department, std::vector<Employment>>& 
     auto iter = dict.find(dep);
     if (iter != dict.end()){
         Employment employ;
-        std::cout << "input FLM of employment\n";
         auto iter_employ = find_employ(iter->second);
         if (iter_employ != iter->second.end()){
             last_empl = *iter_employ;
@@ -234,6 +252,11 @@ void Change_Employment::input_change(Employment& employ){
     } else if (flag == "4"){
         std::cout << "input new salary\n";
         std::getline(std::cin, tmp);
+        int sal = std::atoi(tmp.c_str());
+        if (sal <= 0){
+            std::cout << "wrong input salary\n";
+            return;
+        }
         employ.set_salary(std::atoi(tmp.c_str()));
     } else if (flag == "5"){
         std::cout << "input new function\n";
@@ -248,10 +271,13 @@ void Change_Employment::input_change(Employment& employ){
 std::vector<Employment>::iterator Change_Employment::find_employ(std::vector<Employment>& employs){
     Employment employ;
     std::string name;
+    std::cout << "input first name\n";
     std::getline(std::cin, name);
     employ.set_first_name(name);
+    std::cout << "input last name\n";
     std::getline(std::cin, name);
     employ.set_last_name(name);
+    std::cout << "input middle name\n";
     std::getline(std::cin, name);
     employ.set_middle_name(name);
     auto iter = employs.begin();
