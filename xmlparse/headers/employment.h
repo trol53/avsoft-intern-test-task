@@ -57,6 +57,10 @@ public:
                this->middle_name != rhs.middle_name;
     }
 
+    bool is_empty(){
+        return salary <= 0;
+    }
+
     void print() const{
         std::cout << '\t' << first_name <<  " " << last_name << " " << middle_name << '\n'
             << '\t' << function << '\n'

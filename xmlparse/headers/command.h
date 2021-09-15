@@ -50,11 +50,14 @@ public:
 
     void undo(std::map <Department, std::vector<Employment>>& dict) override;
 
+    bool is_exist(std::vector<Employment>& employs, Employment& employ);
+
     bool is_available() override;
 
 
 
     Department last_dep;
+    Employment last_empl;
 };
 
 class Delete_Employment : public Command {

@@ -5,56 +5,72 @@ void Worker::Run(){
     std::cout << "input file name\n";
     std::getline(std::cin, file_name);
     dict = pars.Load(file_name);
-    std::string flag;
+    int flag;
+    std::string tmp;
+    Command* command;
     print_menu();
-    while(true){
-        std::getline(std::cin, flag);
-        if (flag == "0"){
+    bool break_check = true;
+    while(break_check){
+        std::getline(std::cin, tmp);
+        flag = std::atoi(tmp.c_str());
+        switch (flag) {
+
+        case 0:
             std::cout << "input new file name\n";
             std::getline(std::cin, file_name);
             dict = pars.Load(file_name);
-        } else if (flag == "1") {
-            Command* create_dep = new Create_Department;
-            create_dep->execute(dict);
-            if (create_dep->is_available())
-                commands.push(create_dep);
-        }else if(flag == "2"){
-            Command* create_empl = new Create_Employment;
-            create_empl->execute(dict);
-            if (create_empl->is_available())
-                commands.push(create_empl);
-        } else if (flag == "3"){
-            Command* delete_dep = new Delete_Departament;
-            delete_dep->execute(dict);
-            if (delete_dep->is_available())
-                commands.push(delete_dep);
-        } else if (flag == "4"){
-            Command* delete_empl = new Delete_Employment;
-            delete_empl->execute(dict);
-            if (delete_empl->is_available())
-                commands.push(delete_empl);
-        } else if (flag == "5"){
-            Command* change_dep = new Change_Department;
-            change_dep->execute(dict);
-            if (change_dep->is_available())
-                commands.push(change_dep);
-        } else if (flag == "6"){
-            Command* change_empl = new Change_Employment;
-            change_empl->execute(dict);
-            if (change_empl->is_available())
-                commands.push(change_empl);
-        }else if (flag == "7"){
+            break;
+        case 1:
+            command = new Create_Department;
+            command->execute(dict);
+            if (command->is_available())
+                commands.push(command);
+            break;
+        case 2:
+            command = new Create_Employment;
+            command->execute(dict);
+                if (command->is_available())
+                    commands.push(command);
+            break;
+        case 3:
+            command = new Delete_Departament;
+            command->execute(dict);
+            if (command->is_available())
+                commands.push(command);
+            break;
+        case 4:
+            command = new Delete_Employment;
+            command->execute(dict);
+            if (command->is_available())
+                commands.push(command);
+            break;
+        case 5:
+            command = new Change_Department;
+            command->execute(dict);
+            if (command->is_available())
+                commands.push(command);
+            break;
+        case 6:
+            command = new Change_Employment;
+            command->execute(dict);
+            if (command->is_available())
+                commands.push(command);
+            break;
+        case 7:
             print_tree();
-        } else if (flag == "8"){
+            break;
+        case 8:
             if (!commands.empty()) {
                 commands.top()->undo(dict);
                 commands.pop();
             }
-        } else if(flag == "9"){
+            break;
+        case 9:
             std::cout << "input file name\n";
             std::getline(std::cin, file_name);
             pars.Save(file_name, dict);
-        } else if (flag == "10"){
+        case 10:
+            break_check = false;
             break;
         }
         print_menu();
